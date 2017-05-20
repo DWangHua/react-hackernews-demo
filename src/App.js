@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Search from './Search';
+import Table from './Table';
 import './App.css';
+
 
 const list = [
     {
@@ -22,19 +24,45 @@ const list = [
 ];
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, ed <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            list,
+            searchTerm: ''
+        };
+        this.handleClick = this.handleClick.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+    }
+
+    handleClick(id) {
+        const updatedList = this.state.list.filter(item => item.objectID !== id);
+        this.setState({
+            list: updatedList
+        });
+    }
+
+    handleSearch(e) {
+        this.setState({
+            searchTerm: e.target.value
+        });
+    }
+
+    render() {
+        const { list, searchTerm } = this.state;
+        return (
+            <div className="App">
+                <Search 
+                    searchTerm={searchTerm}
+                    handleSearch={this.handleSearch}
+                >Search</Search>
+                <Table
+                    list={list}
+                    pattern={searchTerm}
+                    handleClick={this.handleClick}
+                />
+            </div>
+        );
+    }
 }
 
 export default App;
